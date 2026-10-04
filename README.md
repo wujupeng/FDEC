@@ -526,24 +526,23 @@ $$
 
 ### 版本对比轮播
 
-> 🔄 在浏览器打开 [`docs/showcase.html`](docs/showcase.html) 可查看 **V1 ↔ V2 自动轮播 + 并排对比**（支持键盘 ←/→ 切换）。
+> 🔄 在浏览器打开 [`docs/showcase.html`](docs/showcase.html) 可查看 **V1 ↔ V2 自动轮播 + 并排对比**（支持键盘 ←/→ 切换，5 秒自动播放）。
+>
+> 在线访问（部署服务器）：http://192.168.2.3:8765/showcase.html
 
-**V1 概念演示器** → **V2 物理—工程两级仿真器**：
+**V2 物理—工程两级仿真器**（当前版本，全页截图）：
 
-<table>
-<tr>
-<td align="center"><b>V1 概念演示器</b></td>
-<td align="center"><b>V2 物理-工程两级仿真器</b></td>
-</tr>
-<tr>
-<td><img src="docs/screenshot-v1.png" alt="FDEC V1" width="100%"></td>
-<td><img src="docs/screenshot-v2.png" alt="FDEC V2" width="100%"></td>
-</tr>
-<tr>
-<td align="center">能量流图 + 基础物理量 + α发电机 + 效率扫描 + 空间电荷 + 燃料对比</td>
-<td align="center">+ 可信度等级 + α抽取率vs自持 + 洛伦兹轨道 + 同轴电场 + 中子三参数 + <b>P_net=95MW</b></td>
-</tr>
-</table>
+![FDEC V2 全页截图](docs/screenshot-v2.png)
+
+> V2 新增：可信度等级 / α抽取率vs自持约束 / 洛伦兹轨道 / 同轴电场 / 中子三参数 / **P_net=95 MW, η_net=9.5%**
+
+<details>
+<summary><b>V1 概念演示器</b>（初版全页截图，点击展开）</summary>
+
+![FDEC V1 全页截图](docs/screenshot-v1.png)
+
+V1：能量流图 + 基础物理量 + α发电机 + 效率扫描 + 空间电荷 + 燃料对比
+</details>
 
 ### 运行
 

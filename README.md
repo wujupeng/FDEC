@@ -524,12 +524,15 @@ $$
 本仓库包含一个交互式可视化模型（React + TypeScript + Ant Design + Recharts），
 将上述物理模型具体可视化，可调节聚变功率、α 转换效率、空间电荷结构参数。
 
+![FDEC 可视化模型全页截图](docs/screenshot.png)
+
 ### 运行
 
 ```bash
 npm install
-npm run dev      # 开发服务器 http://localhost:5173
+npm run dev      # 开发服务器（Vite，自动选端口）
 npm run build    # 生产构建到 dist/
+npm run serve    # 轻量静态服务器托管 dist/（自动选端口，无需 Vite）
 ```
 
 ### 可视化模块
@@ -538,7 +541,7 @@ npm run build    # 生产构建到 dist/
 | --- | --- |
 | 能量流图 | 1 GW → α(199 MW) + n(801 MW) → 分离 → 回收 → HVDC |
 | 关键参数面板 | 反应率 Ṅ_f、α/中子产率、I_α、V_α、I×V 自洽校验 |
-| α 粒子发电机 | 反向粒子加速器：113.7 kA × 1.75 MV ≈ 199 MW |
+| α 粒子发电机 | 反向粒子加速器：113.7 A × 1.75 MV ≈ 199 MW |
 | 效率扫描 | η_α 滑块 → P_α·η_α 实时计算与柱状图 |
 | 空间电荷模型 | Child–Langmuir 定律 J_CL = (4/9)ε₀√(2q/m)·V^1.5/d² |
 | 燃料路径对比 | D-T / D-³He / p-B¹¹ 带电份额与直接电功率 |

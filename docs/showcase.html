@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FDEC 版本对比轮播 — V1 → V2 → V3 → V4 反应堆方案比较器</title>
+<title>FDEC 版本对比轮播 — V1 → V2 → V3 → V4 → V5 物理可信度验证</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -104,15 +104,16 @@
 <body>
 <header>
   <h1>FDEC 版本对比轮播</h1>
-  <p>V1 → V2 → V3 → V4 反应堆方案比较器 · 聚变直接能量转换电站</p>
+  <p>V1 → V2 → V3 → V4 → V5 物理可信度验证 · 聚变直接能量转换电站</p>
 </header>
 
 <div class="tabs">
   <div class="tab" data-idx="0">V1 概念演示器</div>
   <div class="tab" data-idx="1">V2 物理-工程仿真器</div>
   <div class="tab" data-idx="2">V3 物理引擎</div>
-  <div class="tab active" data-idx="3">V4 反应堆方案比较器</div>
-  <div class="tab" data-idx="4">V3 vs V4 对比</div>
+  <div class="tab" data-idx="3">V4 反应堆方案比较器</div>
+  <div class="tab active" data-idx="4">V5 物理可信度验证</div>
+  <div class="tab" data-idx="5">V4 vs V5 对比</div>
 </div>
 
 <div class="stage">
@@ -128,17 +129,21 @@
     <img src="screenshot-v3.png" alt="FDEC V3">
     <div class="caption"><strong>V3 物理引擎</strong> · 6项物理校验 / Operating Map / Boris粒子轨迹 / 核反应转换层 / 中子四参数链</div>
   </div>
-  <div class="slide active">
+  <div class="slide">
     <img src="screenshot-v4.png" alt="FDEC V4">
     <div class="caption"><strong>V4 反应堆方案比较器</strong> · 能量账本 / 粒子账本 / 等离子体功率平衡 / Fuel×Geometry优化矩阵 / ERF+NETF+DEC Advantage</div>
   </div>
+  <div class="slide active">
+    <img src="screenshot-v5.png" alt="FDEC V5">
+    <div class="caption"><strong>V5 物理可信度验证</strong> · 守恒律审计(能量/电荷/粒子/动量) / Monte Carlo不确定性 / P10/P50/P90 / 置信度分级 / 模型等级</div>
+  </div>
   <div class="slide">
     <div class="compare">
-      <h3>V3（左）vs V4（右）</h3>
+      <h3>V4（左）vs V5（右）</h3>
       <table>
         <tr>
-          <td><div class="label">V3 物理引擎</div><img src="screenshot-v3.png" alt="V3"></td>
           <td><div class="label">V4 反应堆方案比较器</div><img src="screenshot-v4.png" alt="V4"></td>
+          <td><div class="label">V5 物理可信度验证</div><img src="screenshot-v5.png" alt="V5"></td>
         </tr>
       </table>
     </div>
@@ -153,15 +158,16 @@
   <span class="dot" data-idx="0"></span>
   <span class="dot" data-idx="1"></span>
   <span class="dot" data-idx="2"></span>
-  <span class="dot active" data-idx="3"></span>
-  <span class="dot" data-idx="4"></span>
+  <span class="dot" data-idx="3"></span>
+  <span class="dot active" data-idx="4"></span>
+  <span class="dot" data-idx="5"></span>
 </div>
 
 <footer>FDEC · Fusion Direct Energy Conversion · <a href="https://github.com/wujupeng/FDEC" style="color:#3b82f6">github.com/wujupeng/FDEC</a></footer>
 
 <script>
-  let idx = 3;
-  const total = 5;
+  let idx = 4;
+  const total = 6;
   function show(i) {
     idx = (i + total) % total;
     document.querySelectorAll('.slide').forEach((s, n) => s.classList.toggle('active', n === idx));

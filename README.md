@@ -619,11 +619,20 @@ npm run serve    # 轻量静态服务器托管 dist/（自动选端口，无需 
 - [x] 反应堆几何（托卡马克 / 直线型 / 磁镜 / FRC）
 - [x] Fuel × Geometry 二维优化矩阵（自动寻找 max P_net）
 
+### V5 — 物理可信度与数字孪生验证层
+- [x] 能量守恒审计（P_fusion = P_electric + P_loss + P_radiation + P_escape）
+- [x] 电荷守恒审计（Q_in = Q_out，电荷回路闭合）
+- [x] 粒子守恒审计（N_produced = N_captured + N_escaped + N_deposited）
+- [x] 动量守恒审计（两体反应 p1=p2 + 三体反应能量均分）
+- [x] Monte Carlo 不确定性分析（500 次采样，P10/P50/P90 + 可行性概率）
+- [x] 置信度分级（HIGH/MEDIUM/LOW）+ 模型等级（L0 Concept → L3 Validated）
+
 ### 后续
+- [ ] V6: 3D Particle Digital Twin
+- [ ] V7: 中子输运（OpenMC / DAGMC 对接）
+- [ ] V8: 实验基准校验
 - [ ] α 扩散与输运模型
 - [ ] 等离子体 MHD 耦合
-- [ ] 包层中子学
-- [ ] 与 OpenMC / DAGMC 对接（V5）
 
 ---
 

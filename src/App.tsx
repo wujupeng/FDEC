@@ -37,6 +37,10 @@ import { computeParticleLedger } from './physics/particleLedger';
 import { computeReactorModel } from './reactor/reactorModel';
 import { computeOptimizationMap } from './reactor/kpi';
 import { ReactorGeometries, getGeometry } from './reactor/geometry';
+import { runValidation } from './validation/validationEngine';
+import { runMonteCarlo } from './validation/uncertainty';
+
+import PhysicsTruthPanel from './components/PhysicsTruthPanel';
 
 const { Header, Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -213,6 +217,37 @@ export default function App() {
     [fusionPower, fAlpha, etaAlpha, etaDec, etaCapture, etaTransfer, v4TempKeV, v4Density, v4Confinement, heating.pExternal, pMagnet, pVacuum, pCooling, pPowerElec, pRadiation]
   );
 
+  const v5Uncertainty = useMemo(
+    () => runMonteCarlo(
+      {
+        reaction: v4Reaction,
+        geometry: v4Geometry,
+        fusionPower,
+        fAlphaExtract: fAlpha,
+        etaAlphaCapture: etaAlpha,
+        etaAlphaDec: etaDec,
+        etaNeutronCapture: etaCapture,
+        etaNeutronConversion: etaTransfer,
+        etaNeutronDec: etaDec,
+        temperatureKeV: v4TempKeV,
+        densityM3: v4Density,
+        confinementTime: v4Confinement,
+        pPlasma: heating.pExternal,
+        pMagnet, pVacuum, pCooling,
+        pPower: pPowerElec,
+        pControl: pRadiation,
+        etaThermalRecovery: 0.3,
+      },
+      { etaAlphaCapture: 0.15, etaAlphaDec: 0.1, etaNeutronCapture: 0.2, etaNeutronConversion: 0.2, etaNeutronDec: 0.15, fAlphaExtract: 0.1 },
+      500
+    ),
+    [v4Reaction, v4Geometry, fusionPower, fAlpha, etaAlpha, etaDec, etaCapture, etaTransfer, v4TempKeV, v4Density, v4Confinement, heating.pExternal, pMagnet, pVacuum, pCooling, pPowerElec, pRadiation]
+  );
+  const v5Validation = useMemo(
+    () => runValidation(v4ReactorModel, v5Uncertainty),
+    [v4ReactorModel, v5Uncertainty]
+  );
+
   const handlePlantChange = (key: string, value: number) => {
     switch (key) {
       case 'pMagnet': setPMagnet(value); break;
@@ -238,9 +273,9 @@ export default function App() {
       >
         <Space direction="vertical" size={2} style={{ width: '100%' }}>
           <Space align="center">
-            <Title level={3} style={{ margin: 0, color: '#f3f4f6' }}>FDEC V4</Title>
-            <Tag color="blue">Fusion Reactor Architecture & Direct Energy Optimization</Tag>
-            <Text style={{ color: '#9ca3af' }}>聚变直接能量转换 · 反应堆方案比较器</Text>
+            <Title level={3} style={{ margin: 0, color: '#f3f4f6' }}>FDEC V5</Title>
+            <Tag color="blue">Physics Validation & Uncertainty Engine</Tag>
+            <Text style={{ color: '#9ca3af' }}>聚变直接能量转换 · 物理可信度与数字孪生验证层</Text>
           </Space>
           <Paragraph style={{ margin: 0, color: '#6b7280', fontSize: 12 }}>
             让程序不断给想法制造困难，然后看它还能不能活下来。
@@ -409,6 +444,24 @@ export default function App() {
             粒子账本（N/s 产率追踪 + 电荷守恒）、等离子体功率平衡（韧致辐射 + 回旋辐射 + 输运损失）、
             粒子排气（几何因子 + 捕获效率）、反应堆几何（托卡马克 / 直线型 / 磁镜 / FRC）与
             Fuel×Geometry 二维优化矩阵。第一原则：允许模型否定自己的方案——NOT VIABLE 是有效输出。
+          </Paragraph>
+        </Card>
+
+        <Divider orientation="left" style={{ borderColor: '#374151', color: '#e5e7eb', fontSize: 14 }}>
+          V5 物理可信度验证：守恒律审计 / 不确定性分析 / 置信度判定
+        </Divider>
+
+        <div style={{ marginBottom: 16 }}>
+          <PhysicsTruthPanel report={v5Validation} uncertainty={v5Uncertainty} />
+        </div>
+
+        <Card size="small" style={{ background: '#0d1421', border: '1px solid #1f2937' }}>
+          <Paragraph style={{ color: '#6b7280', fontSize: 12, margin: 0 }}>
+            <Text strong style={{ color: '#9ca3af' }}>V5 物理可信度验证说明：</Text>
+            对 V4 反应堆模型执行守恒律审计（能量守恒 / 电荷守恒 / 粒子守恒 / 动量守恒 / 化学计量）、
+            Monte Carlo 不确定性分析（500 次采样，参数扰动 ±10-20%，输出 P10/P50/P90 与可行性概率）、
+            置信度分级（HIGH/MEDIUM/LOW）与模型等级（L0 Concept / L1 Analytical / L2 Numerical / L3 Validated）。
+            每个结果都附带假设、有效性与不确定度——这是从"数字"到"可信数字"的跨越。
           </Paragraph>
         </Card>
       </Content>

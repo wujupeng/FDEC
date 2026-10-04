@@ -526,15 +526,23 @@ $$
 
 ### 版本对比轮播
 
-> 🔄 在浏览器打开 [`docs/showcase.html`](docs/showcase.html) 可查看 **V1 → V2 → V3 自动轮播 + V2/V3 并排对比**（支持键盘 ←/→ 切换，6 秒自动播放）。
+> 🔄 在浏览器打开 [`docs/showcase.html`](docs/showcase.html) 可查看 **V1 → V2 → V3 → V4 → V5 自动轮播 + V4/V5 并排对比**（支持键盘 ←/→ 切换，6 秒自动播放）。
 >
 > 在线访问（部署服务器）：http://192.168.2.3:8765/showcase.html
 
-**V4 反应堆方案比较器**（当前版本，全页截图）：
+**V5 物理可信度验证**（当前版本，滚动动图）：
+
+![FDEC V5 滚动动图](docs/fdec-animation.gif)
+
+> V5 新增：守恒律审计（能量/电荷/粒子/动量）/ Monte Carlo 不确定性分析（P10/P50/P90）/ 置信度分级 / 模型等级（L0 Concept → L3 Validated）
+
+<details>
+<summary><b>V4 反应堆方案比较器</b>（全页截图，点击展开）</summary>
 
 ![FDEC V4 全页截图](docs/screenshot-v4.png)
 
-> V4 新增：反应数据库（含副反应+辐射损失）/ 能量账本（守恒审计+ERF/NETF）/ 粒子账本（N/s+电荷守恒）/ 等离子体功率平衡 / 磁喷口 / 粒子排气 / Fuel×Geometry 优化矩阵
+V4：反应数据库 / 能量账本 / 粒子账本 / Fuel×Geometry 优化矩阵
+</details>
 
 <details>
 <summary><b>V3 物理引擎</b>（全页截图，点击展开）</summary>

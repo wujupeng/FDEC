@@ -524,7 +524,26 @@ $$
 本仓库包含一个交互式可视化模型（React + TypeScript + Ant Design + Recharts），
 将上述物理模型具体可视化，可调节聚变功率、α 转换效率、空间电荷结构参数。
 
-![FDEC 可视化模型全页截图](docs/screenshot.png)
+### 版本对比轮播
+
+> 🔄 在浏览器打开 [`docs/showcase.html`](docs/showcase.html) 可查看 **V1 ↔ V2 自动轮播 + 并排对比**（支持键盘 ←/→ 切换）。
+
+**V1 概念演示器** → **V2 物理—工程两级仿真器**：
+
+<table>
+<tr>
+<td align="center"><b>V1 概念演示器</b></td>
+<td align="center"><b>V2 物理-工程两级仿真器</b></td>
+</tr>
+<tr>
+<td><img src="docs/screenshot-v1.png" alt="FDEC V1" width="100%"></td>
+<td><img src="docs/screenshot-v2.png" alt="FDEC V2" width="100%"></td>
+</tr>
+<tr>
+<td align="center">能量流图 + 基础物理量 + α发电机 + 效率扫描 + 空间电荷 + 燃料对比</td>
+<td align="center">+ 可信度等级 + α抽取率vs自持 + 洛伦兹轨道 + 同轴电场 + 中子三参数 + <b>P_net=95MW</b></td>
+</tr>
+</table>
 
 ### 运行
 

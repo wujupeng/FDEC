@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FDEC 版本对比轮播 — V1 概念演示器 → V2 物理-工程仿真器</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0e1a;
+    color: #e5e7eb;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+  }
+  header {
+    text-align: center;
+    padding: 24px 16px 12px;
+    border-bottom: 1px solid #1f2937;
+  }
+  header h1 { font-size: 22px; color: #f3f4f6; }
+  header p { color: #9ca3af; font-size: 13px; margin-top: 6px; }
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: 1px solid #374151;
+    background: #111827;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .tab.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+  .tab:hover { border-color: #3b82f6; }
+  .stage {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 16px 32px;
+    text-align: center;
+  }
+  .slide { display: none; }
+  .slide.active { display: block; }
+  .slide img {
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid #1f2937;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  .caption {
+    margin-top: 12px;
+    color: #9ca3af;
+    font-size: 13px;
+  }
+  .caption strong { color: #f3f4f6; }
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 8px 0 20px;
+  }
+  .nav button {
+    background: #111827;
+    border: 1px solid #374151;
+    color: #e5e7eb;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav button:hover { border-color: #3b82f6; background: #1e3a5f; }
+  .dots { text-align: center; padding-bottom: 24px; }
+  .dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #374151;
+    margin: 0 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dot.active { background: #3b82f6; }
+  .compare {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px;
+    text-align: center;
+  }
+  .compare h3 { color: #f3f4f6; font-size: 16px; margin-bottom: 16px; }
+  .compare table { width: 100%; border-collapse: collapse; }
+  .compare td { vertical-align: top; padding: 8px; width: 50%; }
+  .compare img { max-width: 100%; border-radius: 6px; border: 1px solid #1f2937; }
+  .compare .label { color: #9ca3af; font-size: 12px; margin-bottom: 6px; }
+  footer { text-align: center; padding: 20px; color: #4b5563; font-size: 12px; border-top: 1px solid #1f2937; }
+</style>
+</head>
+<body>
+<header>
+  <h1>FDEC 版本对比轮播</h1>
+  <p>V1 概念演示器 → V2 物理—工程两级仿真器 · 聚变直接能量转换电站</p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" data-idx="0">V1 概念演示器</div>
+  <div class="tab" data-idx="1">V2 物理-工程仿真器</div>
+  <div class="tab" data-idx="2">并排对比</div>
+</div>
+
+<div class="stage">
+  <div class="slide active">
+    <img src="screenshot-v1.png" alt="FDEC V1">
+    <div class="caption"><strong>V1 概念演示器</strong> · 能量流图 + 基础物理量 + α 发电机 + 效率扫描 + 空间电荷 + 燃料对比</div>
+  </div>
+  <div class="slide">
+    <img src="screenshot-v2.png" alt="FDEC V2">
+    <div class="caption"><strong>V2 物理-工程两级仿真器</strong> · 新增可信度等级 / α抽取率vs自持 / 洛伦兹轨道 / 同轴电场 / 中子三参数 / 净电输出 P_net=95MW</div>
+  </div>
+  <div class="slide">
+    <div class="compare">
+      <h3>V1（左）vs V2（右）</h3>
+      <table>
+        <tr>
+          <td><div class="label">V1 概念演示器</div><img src="screenshot-v1.png" alt="V1"></td>
+          <td><div class="label">V2 物理-工程仿真器</div><img src="screenshot-v2.png" alt="V2"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="prev">‹</button>
+  <button id="next">›</button>
+</div>
+<div class="dots">
+  <span class="dot active" data-idx="0"></span>
+  <span class="dot" data-idx="1"></span>
+  <span class="dot" data-idx="2"></span>
+</div>
+
+<footer>FDEC · Fusion Direct Energy Conversion · <a href="https://github.com/wujupeng/FDEC" style="color:#3b82f6">github.com/wujupeng/FDEC</a></footer>
+
+<script>
+  let idx = 0;
+  const total = 3;
+  function show(i) {
+    idx = (i + total) % total;
+    document.querySelectorAll('.slide').forEach((s, n) => s.classList.toggle('active', n === idx));
+    document.querySelectorAll('.tab').forEach((t, n) => t.classList.toggle('active', n === idx));
+    document.querySelectorAll('.dot').forEach((d, n) => d.classList.toggle('active', n === idx));
+  }
+  document.getElementById('prev').onclick = () => show(idx - 1);
+  document.getElementById('next').onclick = () => show(idx + 1);
+  document.querySelectorAll('.tab').forEach(t => t.onclick = () => show(+t.dataset.idx));
+  document.querySelectorAll('.dot').forEach(d => d.onclick = () => show(+d.dataset.idx));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+  setInterval(() => { if (idx < 2) show(idx + 1); }, 5000);
+</script>
+</body>
+</html>

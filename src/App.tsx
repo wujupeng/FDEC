@@ -5,6 +5,12 @@ import { computeAlphaHeating } from './physics/alphaHeating';
 import { computeNeutronConversion } from './physics/neutronConversion';
 import { computeNetPower } from './physics/netPower';
 import { formatPower } from './physics/format';
+import { computePlasmaConfinement } from './physics/plasma';
+import { computeSpaceChargeRatio } from './physics/spaceCharge';
+import { computeNeutronChain } from './physics/neutron';
+import { computeDirectConverter } from './physics/converter';
+import { computePowerBalance } from './physics/powerBalance';
+import { computeValidation } from './physics/validation';
 import EnergyFlowDiagram from './components/EnergyFlowDiagram';
 import KeyParametersPanel from './components/KeyParametersPanel';
 import ParticleGenerator from './components/ParticleGenerator';
@@ -17,6 +23,10 @@ import AlphaOrbit from './components/AlphaOrbit';
 import CoaxialConverter from './components/CoaxialConverter';
 import NeutronConversionLayers from './components/NeutronConversionLayers';
 import NetPowerSummary from './components/NetPowerSummary';
+import PhysicsValidationPanel from './components/PhysicsValidationPanel';
+import OperatingMap from './components/OperatingMap';
+import ParticleTrajectory from './components/ParticleTrajectory';
+import NuclearConversionPanel from './components/NuclearConversionPanel';
 
 const { Header, Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -42,6 +52,7 @@ export default function App() {
   const [pCooling, setPCooling] = useState(20e6);
   const [pPowerElec, setPPowerElec] = useState(15e6);
   const [pRadiation, setPRadiation] = useState(10e6);
+  const [etaExtraction] = useState(0.8);
 
   const source = useMemo(() => computeFusionSource(fusionPower), [fusionPower]);
   const alpha = useMemo(() => computeAlphaElectrical(fusionPower), [fusionPower]);
@@ -70,6 +81,47 @@ export default function App() {
     [pAlphaElectric, neutron.pElectric, fusionPower, heating.pExternal, pMagnet, pVacuum, pCooling, pPowerElec, pRadiation]
   );
 
+  const plasma = useMemo(
+    () => computePlasmaConfinement(source.alphaPower * (1 - fAlpha), heating.pExternal, pRequired),
+    [source.alphaPower, fAlpha, heating.pExternal, pRequired]
+  );
+  const scRatio = useMemo(
+    () => computeSpaceChargeRatio(alpha.alphaCurrent, scArea, scVoltage, scGap),
+    [alpha.alphaCurrent, scArea, scVoltage, scGap]
+  );
+  const neutronChain = useMemo(
+    () => computeNeutronChain(source.neutronPower, etaCapture, etaTransfer, etaExtraction, etaDec),
+    [source.neutronPower, etaCapture, etaTransfer, etaExtraction, etaDec]
+  );
+  const converter = useMemo(
+    () => computeDirectConverter(pAlphaElectric, neutronChain.pElectric),
+    [pAlphaElectric, neutronChain.pElectric]
+  );
+  const powerBalance = useMemo(
+    () => computePowerBalance(converter.pElectric, fusionPower, {
+      pPlasma: heating.pExternal,
+      pMagnet,
+      pVacuum,
+      pCooling,
+      pPower: pPowerElec,
+      pControl: pRadiation,
+    }),
+    [converter.pElectric, fusionPower, heating.pExternal, pMagnet, pVacuum, pCooling, pPowerElec, pRadiation]
+  );
+  const validation = useMemo(
+    () => computeValidation({
+      pFusion: fusionPower,
+      pAlpha: source.alphaPower,
+      pNeutron: source.neutronPower,
+      mFactor: plasma.mFactor,
+      rSc: scRatio.rSc,
+      neutronOverallEfficiency: neutronChain.overallEfficiency,
+      pNet: powerBalance.pNet,
+      etaNet: powerBalance.etaNet,
+    }),
+    [fusionPower, source.alphaPower, source.neutronPower, plasma.mFactor, scRatio.rSc, neutronChain.overallEfficiency, powerBalance.pNet, powerBalance.etaNet]
+  );
+
   const handlePlantChange = (key: string, value: number) => {
     switch (key) {
       case 'pMagnet': setPMagnet(value); break;
@@ -95,9 +147,9 @@ export default function App() {
       >
         <Space direction="vertical" size={2} style={{ width: '100%' }}>
           <Space align="center">
-            <Title level={3} style={{ margin: 0, color: '#f3f4f6' }}>FDEC V2</Title>
-            <Tag color="blue">Fusion Direct Energy Conversion System Model</Tag>
-            <Text style={{ color: '#9ca3af' }}>聚变直接能量转换 · 物理—工程两级仿真器</Text>
+            <Title level={3} style={{ margin: 0, color: '#f3f4f6' }}>FDEC V3</Title>
+            <Tag color="blue">Fusion Direct Energy Conversion Physics Engine</Tag>
+            <Text style={{ color: '#9ca3af' }}>聚变直接能量转换 · 物理引擎与自洽性校验</Text>
           </Space>
           <Paragraph style={{ margin: 0, color: '#6b7280', fontSize: 12 }}>
             让程序不断给想法制造困难，然后看它还能不能活下来。
@@ -182,14 +234,33 @@ export default function App() {
           <FuelComparison fusionPower={fusionPower} eta={etaAlpha} />
         </div>
 
+        <Divider orientation="left" style={{ borderColor: '#374151', color: '#e5e7eb', fontSize: 14 }}>
+          V3 物理引擎：自洽性校验 / 参数扫描 / 粒子轨迹 / 核反应转换
+        </Divider>
+
+        <div style={{ marginBottom: 16 }}>
+          <PhysicsValidationPanel result={validation} />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <OperatingMap requiredCurrent={alpha.alphaCurrent} collectionArea={scArea} />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <ParticleTrajectory />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <NuclearConversionPanel />
+        </div>
+
         <Card size="small" style={{ background: '#0d1421', border: '1px solid #1f2937' }}>
           <Paragraph style={{ color: '#6b7280', fontSize: 12, margin: 0 }}>
-            <Text strong style={{ color: '#9ca3af' }}>V2 模型说明：</Text>
-            本仿真器在能量守恒基础上引入 α 抽取率与聚变自持约束（f_α vs P_required）、
-            洛伦兹回旋半径、同轴圆柱电场 E(r)=V/(r·ln(b/a))、Child–Langmuir 空间电荷、
-            中子转换三参数（η_capture·η_transfer·η_DEC）与厂用电分项，输出净电效率 η_net。
-            尚未引入等离子体 MHD、输运、α 扩散与包层中子学。若 η_net &lt; 0，说明当前参数下
-            直接发电不经济——这是科学模型而非项目失败。
+            <Text strong style={{ color: '#9ca3af' }}>V3 物理引擎说明：</Text>
+            在 V2 基础上引入自持约束 M 因子（P_α,heat+P_ext vs P_loss）、Boris pusher 粒子轨迹积分、
+            空间电荷 Operating Map（电压×间距参数扫描）、核反应转换层 P=1−exp(−nσx)（⁶Li/⁷Li/⁹Be/²³⁸U）、
+            中子四参数链（η_capture·η_conversion·η_extraction·η_DEC）与 6 项物理校验引擎。
+            目标不是证明 FDEC 一定能发电，而是找出它在哪些物理条件下成立、在哪些条件下必然失败。
           </Paragraph>
         </Card>
       </Content>

@@ -530,9 +530,9 @@ $$
 >
 > 在线访问（部署服务器）：http://192.168.2.3:8765/showcase.html
 
-**V5 物理可信度验证**（当前版本，滚动动图）：
+**V5 物理可信度验证**（当前版本，全页截图）：
 
-![FDEC V5 滚动动图](docs/fdec-animation.gif)
+![FDEC V5 全页截图](docs/screenshot-v5.png)
 
 > V5 新增：守恒律审计（能量/电荷/粒子/动量）/ Monte Carlo 不确定性分析（P10/P50/P90）/ 置信度分级 / 模型等级（L0 Concept → L3 Validated）
 

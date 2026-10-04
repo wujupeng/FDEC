@@ -1,0 +1,9 @@
+# IDE / 工具生成
+.codeartsdoer/
+.vscode/
+.idea/
+
+# 通用
+*.log
+.DS_Store
+Thumbs.db

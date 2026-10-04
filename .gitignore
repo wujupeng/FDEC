@@ -3,6 +3,11 @@
 .vscode/
 .idea/
 
+# 依赖与构建产物
+node_modules/
+dist/
+*.tsbuildinfo
+
 # 通用
 *.log
 .DS_Store

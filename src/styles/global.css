@@ -1,0 +1,78 @@
+:root {
+  --fdec-bg: #0a0e1a;
+  --fdec-panel: #111827;
+  --fdec-alpha: #f59e0b;
+  --fdec-neutron: #06b6d4;
+  --fdec-electric: #22c55e;
+  --fdec-fusion: #ef4444;
+  --fdec-grid: #a855f7;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--fdec-bg);
+  color: #e5e7eb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+}
+
+.fdec-flow {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@keyframes fdec-dash {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.fdec-flow-line {
+  stroke-dasharray: 6 6;
+  animation: fdec-dash 1.2s linear infinite;
+}
+
+@keyframes fdec-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.fdec-pulse {
+  animation: fdec-pulse 2s ease-in-out infinite;
+}
+
+.fdec-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+
+.fdec-section-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #f3f4f6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fdec-equation {
+  background: #0d1421;
+  border: 1px solid #1f2937;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 8px 0;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  color: #93c5fd;
+  font-size: 13px;
+  overflow-x: auto;
+}

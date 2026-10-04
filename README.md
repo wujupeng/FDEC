@@ -530,18 +530,18 @@ $$
 >
 > 在线访问（部署服务器）：http://192.168.2.3:8765/showcase.html
 
-**V3 物理引擎与自洽性校验**（当前版本，全页截图）：
+**V4 反应堆方案比较器**（当前版本，全页截图）：
+
+![FDEC V4 全页截图](docs/screenshot-v4.png)
+
+> V4 新增：反应数据库（含副反应+辐射损失）/ 能量账本（守恒审计+ERF/NETF）/ 粒子账本（N/s+电荷守恒）/ 等离子体功率平衡 / 磁喷口 / 粒子排气 / Fuel×Geometry 优化矩阵
+
+<details>
+<summary><b>V3 物理引擎</b>（全页截图，点击展开）</summary>
 
 ![FDEC V3 全页截图](docs/screenshot-v3.png)
 
-> V3 新增：6 项物理校验引擎（能量守恒/电荷守恒/自持/空间电荷/中子转换/净正电）/ 空间电荷 Operating Map / Boris pusher 粒子轨迹 / 核反应转换层 P=1−exp(−nσx) / 中子四参数链
-
-<details>
-<summary><b>V2 物理-工程两级仿真器</b>（全页截图，点击展开）</summary>
-
-![FDEC V2 全页截图](docs/screenshot-v2.png)
-
-V2：可信度等级 / α抽取率vs自持 / 洛伦兹轨道 / 同轴电场 / 中子三参数 / P_net=95 MW, η_net=9.5%
+V3：6项物理校验 / Operating Map / Boris粒子轨迹 / 核反应转换层 / 中子四参数链
 </details>
 
 <details>
@@ -609,10 +609,21 @@ npm run serve    # 轻量静态服务器托管 dist/（自动选端口，无需 
 - [x] 中子四参数链（η_capture · η_conversion · η_extraction · η_DEC）
 - [x] 6 项物理校验引擎（能量守恒 / 电荷守恒 / 自持 / 空间电荷 / 中子转换 / 净正电）
 
+### V4 — 反应堆方案比较器
+- [x] 反应数据库（D-T / D-D / D-³He / p-B¹¹，含副反应 + 辐射损失 + 点火温度）
+- [x] 能量账本（全链守恒审计 + ERF/NETF 双指标 + DEC Advantage）
+- [x] 粒子账本（N/s 产率追踪 + 电荷守恒校验）
+- [x] 等离子体功率平衡（韧致辐射 + 回旋辐射 + 输运损失 + 自持判定）
+- [x] 磁喷口模型（B 场粒子导向效率 + 回旋半径 + 偏转角）
+- [x] 粒子排气（几何因子 + 捕获效率 + 距离扫描）
+- [x] 反应堆几何（托卡马克 / 直线型 / 磁镜 / FRC）
+- [x] Fuel × Geometry 二维优化矩阵（自动寻找 max P_net）
+
 ### 后续
 - [ ] α 扩散与输运模型
 - [ ] 等离子体 MHD 耦合
 - [ ] 包层中子学
+- [ ] 与 OpenMC / DAGMC 对接（V5）
 
 ---
 

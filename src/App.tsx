@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Layout, Typography, Slider, Card, Space, Tag, Divider } from 'antd';
+import { Layout, Typography, Slider, Card, Space, Tag, Divider, Select, Row, Col } from 'antd';
 import { computeFusionSource, computeAlphaElectrical } from './physics/fusion';
 import { computeAlphaHeating } from './physics/alphaHeating';
 import { computeNeutronConversion } from './physics/neutronConversion';
@@ -27,6 +27,16 @@ import PhysicsValidationPanel from './components/PhysicsValidationPanel';
 import OperatingMap from './components/OperatingMap';
 import ParticleTrajectory from './components/ParticleTrajectory';
 import NuclearConversionPanel from './components/NuclearConversionPanel';
+import EnergyLedgerPanel from './components/EnergyLedgerPanel';
+import ParticleMapPanel from './components/ParticleMapPanel';
+import ReactorKPIPanel from './components/ReactorKPIPanel';
+import OptimizationMapPanel from './components/OptimizationMapPanel';
+import { getPrimaryFuels, getReaction } from './fuels/fuelRegistry';
+import { computeEnergyLedger } from './physics/energyLedger';
+import { computeParticleLedger } from './physics/particleLedger';
+import { computeReactorModel } from './reactor/reactorModel';
+import { computeOptimizationMap } from './reactor/kpi';
+import { ReactorGeometries, getGeometry } from './reactor/geometry';
 
 const { Header, Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -53,6 +63,11 @@ export default function App() {
   const [pPowerElec, setPPowerElec] = useState(15e6);
   const [pRadiation, setPRadiation] = useState(10e6);
   const [etaExtraction] = useState(0.8);
+  const [v4FuelKey, setV4FuelKey] = useState('DT');
+  const [v4GeomKey, setV4GeomKey] = useState('linear');
+  const [v4TempKeV, setV4TempKeV] = useState(15);
+  const [v4Density] = useState(1e20);
+  const [v4Confinement] = useState(1.0);
 
   const source = useMemo(() => computeFusionSource(fusionPower), [fusionPower]);
   const alpha = useMemo(() => computeAlphaElectrical(fusionPower), [fusionPower]);
@@ -122,6 +137,82 @@ export default function App() {
     [fusionPower, source.alphaPower, source.neutronPower, plasma.mFactor, scRatio.rSc, neutronChain.overallEfficiency, powerBalance.pNet, powerBalance.etaNet]
   );
 
+  const v4Reaction = useMemo(() => getReaction(v4FuelKey), [v4FuelKey]);
+  const v4Geometry = useMemo(() => getGeometry(v4GeomKey as 'tokamak' | 'linear' | 'mirror' | 'frc'), [v4GeomKey]);
+  const v4Ledger = useMemo(
+    () => computeEnergyLedger({
+      reaction: v4Reaction,
+      fusionPower,
+      fAlphaExtract: fAlpha,
+      etaAlphaCapture: etaAlpha,
+      etaAlphaDec: etaDec,
+      etaNeutronCapture: etaCapture,
+      etaNeutronConversion: etaTransfer,
+      etaNeutronDec: etaDec,
+      pPlasma: heating.pExternal,
+      pMagnet, pVacuum, pCooling,
+      pPower: pPowerElec,
+      pControl: pRadiation,
+      etaThermalRecovery: 0.3,
+    }),
+    [v4Reaction, fusionPower, fAlpha, etaAlpha, etaDec, etaCapture, etaTransfer, heating.pExternal, pMagnet, pVacuum, pCooling, pPowerElec, pRadiation]
+  );
+  const v4ParticleLedger = useMemo(
+    () => computeParticleLedger({
+      reaction: v4Reaction,
+      fusionPower,
+      fAlphaExtract: fAlpha,
+      etaAlphaCapture: etaAlpha,
+      etaAlphaDec: etaDec,
+      etaNeutronCapture: etaCapture,
+      etaNeutronConversion: etaTransfer,
+      etaNeutronDec: etaDec,
+    }),
+    [v4Reaction, fusionPower, fAlpha, etaAlpha, etaDec, etaCapture, etaTransfer]
+  );
+  const v4ReactorModel = useMemo(
+    () => computeReactorModel({
+      reaction: v4Reaction,
+      geometry: v4Geometry,
+      fusionPower,
+      fAlphaExtract: fAlpha,
+      etaAlphaCapture: etaAlpha,
+      etaAlphaDec: etaDec,
+      etaNeutronCapture: etaCapture,
+      etaNeutronConversion: etaTransfer,
+      etaNeutronDec: etaDec,
+      temperatureKeV: v4TempKeV,
+      densityM3: v4Density,
+      confinementTime: v4Confinement,
+      pPlasma: heating.pExternal,
+      pMagnet, pVacuum, pCooling,
+      pPower: pPowerElec,
+      pControl: pRadiation,
+      etaThermalRecovery: 0.3,
+    }),
+    [v4Reaction, v4Geometry, fusionPower, fAlpha, etaAlpha, etaDec, etaCapture, etaTransfer, v4TempKeV, v4Density, v4Confinement, heating.pExternal, pMagnet, pVacuum, pCooling, pPowerElec, pRadiation]
+  );
+  const v4OptMap = useMemo(
+    () => computeOptimizationMap({
+      fusionPower,
+      fAlphaExtract: fAlpha,
+      etaAlphaCapture: etaAlpha,
+      etaAlphaDec: etaDec,
+      etaNeutronCapture: etaCapture,
+      etaNeutronConversion: etaTransfer,
+      etaNeutronDec: etaDec,
+      temperatureKeV: v4TempKeV,
+      densityM3: v4Density,
+      confinementTime: v4Confinement,
+      pPlasma: heating.pExternal,
+      pMagnet, pVacuum, pCooling,
+      pPower: pPowerElec,
+      pControl: pRadiation,
+      etaThermalRecovery: 0.3,
+    }),
+    [fusionPower, fAlpha, etaAlpha, etaDec, etaCapture, etaTransfer, v4TempKeV, v4Density, v4Confinement, heating.pExternal, pMagnet, pVacuum, pCooling, pPowerElec, pRadiation]
+  );
+
   const handlePlantChange = (key: string, value: number) => {
     switch (key) {
       case 'pMagnet': setPMagnet(value); break;
@@ -147,9 +238,9 @@ export default function App() {
       >
         <Space direction="vertical" size={2} style={{ width: '100%' }}>
           <Space align="center">
-            <Title level={3} style={{ margin: 0, color: '#f3f4f6' }}>FDEC V3</Title>
-            <Tag color="blue">Fusion Direct Energy Conversion Physics Engine</Tag>
-            <Text style={{ color: '#9ca3af' }}>聚变直接能量转换 · 物理引擎与自洽性校验</Text>
+            <Title level={3} style={{ margin: 0, color: '#f3f4f6' }}>FDEC V4</Title>
+            <Tag color="blue">Fusion Reactor Architecture & Direct Energy Optimization</Tag>
+            <Text style={{ color: '#9ca3af' }}>聚变直接能量转换 · 反应堆方案比较器</Text>
           </Space>
           <Paragraph style={{ margin: 0, color: '#6b7280', fontSize: 12 }}>
             让程序不断给想法制造困难，然后看它还能不能活下来。
@@ -261,6 +352,63 @@ export default function App() {
             空间电荷 Operating Map（电压×间距参数扫描）、核反应转换层 P=1−exp(−nσx)（⁶Li/⁷Li/⁹Be/²³⁸U）、
             中子四参数链（η_capture·η_conversion·η_extraction·η_DEC）与 6 项物理校验引擎。
             目标不是证明 FDEC 一定能发电，而是找出它在哪些物理条件下成立、在哪些条件下必然失败。
+          </Paragraph>
+        </Card>
+
+        <Divider orientation="left" style={{ borderColor: '#374151', color: '#e5e7eb', fontSize: 14 }}>
+          V4 反应堆方案比较器：能量账本 / 粒子账本 / KPI / Fuel×Geometry 优化
+        </Divider>
+
+        <Card size="small" style={{ background: 'var(--fdec-panel)', marginBottom: 16 }}>
+          <Row gutter={16}>
+            <Col xs={24} md={8}>
+              <Text style={{ color: '#9ca3af', fontSize: 12 }}>燃料反应</Text>
+              <Select
+                value={v4FuelKey}
+                onChange={setV4FuelKey}
+                style={{ width: '100%', marginTop: 4 }}
+                options={getPrimaryFuels().map((f) => ({ value: f.key, label: `${f.fuel} — ${f.reaction}` }))}
+              />
+            </Col>
+            <Col xs={24} md={8}>
+              <Text style={{ color: '#9ca3af', fontSize: 12 }}>反应堆几何</Text>
+              <Select
+                value={v4GeomKey}
+                onChange={setV4GeomKey}
+                style={{ width: '100%', marginTop: 4 }}
+                options={ReactorGeometries.map((g) => ({ value: g.type, label: `${g.name} — ${g.description.slice(0, 20)}...` }))}
+              />
+            </Col>
+            <Col xs={24} md={8}>
+              <Text style={{ color: '#9ca3af', fontSize: 12 }}>等离子体温度: {v4TempKeV} keV</Text>
+              <Slider min={5} max={300} step={5} value={v4TempKeV} onChange={setV4TempKeV} tooltip={{ formatter: (v) => `${v} keV` }} />
+            </Col>
+          </Row>
+        </Card>
+
+        <div style={{ marginBottom: 16 }}>
+          <EnergyLedgerPanel result={v4Ledger} />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <ParticleMapPanel result={v4ParticleLedger} />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <ReactorKPIPanel result={v4ReactorModel} />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <OptimizationMapPanel map={v4OptMap} />
+        </div>
+
+        <Card size="small" style={{ background: '#0d1421', border: '1px solid #1f2937' }}>
+          <Paragraph style={{ color: '#6b7280', fontSize: 12, margin: 0 }}>
+            <Text strong style={{ color: '#9ca3af' }}>V4 反应堆方案比较器说明：</Text>
+            建立反应数据库（D-T / D-D / D-³He / p-B¹¹，含副反应与辐射损失）、能量账本（全链守恒审计）、
+            粒子账本（N/s 产率追踪 + 电荷守恒）、等离子体功率平衡（韧致辐射 + 回旋辐射 + 输运损失）、
+            粒子排气（几何因子 + 捕获效率）、反应堆几何（托卡马克 / 直线型 / 磁镜 / FRC）与
+            Fuel×Geometry 二维优化矩阵。第一原则：允许模型否定自己的方案——NOT VIABLE 是有效输出。
           </Paragraph>
         </Card>
       </Content>

@@ -530,11 +530,19 @@ $$
 >
 > 在线访问（部署服务器）：http://192.168.2.3:8765/showcase.html
 
-**V5 物理可信度验证**（当前版本，全页高清截图）：
+**V6 3D Particle Digital Twin**（当前版本，全页高清截图）：
+
+![FDEC V6 全页截图](docs/screenshot-v6.png)
+
+> V6 新增：3D Boris Pusher（经典+相对论）/ 空间变化 E/B 场 / 粒子输运（Wall/Converter/Escape）/ Particle Lab 单粒子实验室 / Fate Map 多粒子命运统计 / 10 项 Benchmark Suite / Analytical vs Numerical 对比
+
+<details>
+<summary><b>V5 物理可信度验证</b>（全页截图，点击展开）</summary>
 
 ![FDEC V5 全页截图](docs/screenshot-v5.png)
 
-> V5 新增：守恒律审计（能量/电荷/粒子/动量）/ Monte Carlo 不确定性分析（P10/P50/P90）/ 置信度分级 / 模型等级（L0 Concept → L3 Validated）
+V5：守恒律审计 / Monte Carlo P10/P50/P90 / 置信度分级 / L0→L3 模型等级
+</details>
 
 <details>
 <summary><b>V4 反应堆方案比较器</b>（全页截图，点击展开）</summary>
@@ -635,8 +643,16 @@ npm run serve    # 轻量静态服务器托管 dist/（自动选端口，无需 
 - [x] Monte Carlo 不确定性分析（500 次采样，P10/P50/P90 + 可行性概率）
 - [x] 置信度分级（HIGH/MEDIUM/LOW）+ 模型等级（L0 Concept → L3 Validated）
 
+### V6 — 3D Particle Digital Twin
+- [x] 3D Boris Pusher（经典 + 相对论双模式）
+- [x] 空间变化 E/B 场（Uniform / Parallel Plate / Coaxial / 磁喷口解析模型）
+- [x] 粒子输运（Wall 碰撞 / Converter 捕获 / Escape 判定）
+- [x] Particle Lab 单粒子实验室（参数可调 + TRACE + 3D 轨迹 + Energy(t) + Analytical vs Numerical）
+- [x] Particle Fate Map（多粒子命运统计 / 粒子捕获率 vs 能量捕获率）
+- [x] 10 项 Benchmark Suite（V6-B01~B10，自动运行 + PASS/FAIL 判定）
+- [x] 预设实验 Case A/B/C/D（无电场回旋 / E×B 漂移 / 磁喷口导向 / 同轴减速）
+
 ### 后续
-- [ ] V6: 3D Particle Digital Twin
 - [ ] V7: 中子输运（OpenMC / DAGMC 对接）
 - [ ] V8: 实验基准校验
 - [ ] α 扩散与输运模型

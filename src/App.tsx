@@ -41,6 +41,10 @@ import { runValidation } from './validation/validationEngine';
 import { runMonteCarlo } from './validation/uncertainty';
 
 import PhysicsTruthPanel from './components/PhysicsTruthPanel';
+import ParticleLab from './components/ParticleLab';
+import FateMapPanel from './components/FateMapPanel';
+import BenchmarkPanel from './components/BenchmarkPanel';
+import ExperimentCases from './components/ExperimentCases';
 
 const { Header, Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -273,9 +277,9 @@ export default function App() {
       >
         <Space direction="vertical" size={2} style={{ width: '100%' }}>
           <Space align="center">
-            <Title level={3} style={{ margin: 0, color: '#f3f4f6' }}>FDEC V5</Title>
-            <Tag color="blue">Physics Validation & Uncertainty Engine</Tag>
-            <Text style={{ color: '#9ca3af' }}>聚变直接能量转换 · 物理可信度与数字孪生验证层</Text>
+            <Title level={3} style={{ margin: 0, color: '#f3f4f6' }}>FDEC V6</Title>
+            <Tag color="geekblue">3D Particle Digital Twin</Tag>
+            <Text style={{ color: '#9ca3af' }}>聚变直接能量转换 · 三维粒子数字孪生与场求解器</Text>
           </Space>
           <Paragraph style={{ margin: 0, color: '#6b7280', fontSize: 12 }}>
             让程序不断给想法制造困难，然后看它还能不能活下来。
@@ -462,6 +466,37 @@ export default function App() {
             Monte Carlo 不确定性分析（500 次采样，参数扰动 ±10-20%，输出 P10/P50/P90 与可行性概率）、
             置信度分级（HIGH/MEDIUM/LOW）与模型等级（L0 Concept / L1 Analytical / L2 Numerical / L3 Validated）。
             每个结果都附带假设、有效性与不确定度——这是从"数字"到"可信数字"的跨越。
+          </Paragraph>
+        </Card>
+
+        <Divider orientation="left" style={{ borderColor: '#374151', color: '#e5e7eb', fontSize: 14 }}>
+          V6 3D Particle Digital Twin：单粒子实验室 / 多粒子命运 / 基准测试 / 预设实验
+        </Divider>
+
+        <div style={{ marginBottom: 16 }}>
+          <ParticleLab />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <ExperimentCases />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <FateMapPanel />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <BenchmarkPanel />
+        </div>
+
+        <Card size="small" style={{ background: '#0d1421', border: '1px solid #1f2937' }}>
+          <Paragraph style={{ color: '#6b7280', fontSize: 12, margin: 0 }}>
+            <Text strong style={{ color: '#9ca3af' }}>V6 3D Particle Digital Twin 说明：</Text>
+            将"计算一个粒子"升级为"观察一群粒子在真实三维电磁场中怎么运动、在哪里损失、在哪里被回收"。
+            核心引擎：3D Boris Pusher（经典 + 相对论双模式）、空间变化 E/B 场（均匀 / 平行板 / 同轴 / 磁喷口）、
+            粒子输运（Wall 碰撞 / Converter 捕获 / Escape 判定）、命运统计（粒子捕获率 vs 能量捕获率）、
+            Analytical vs Numerical 对比（回旋半径误差检验）、10 项 Benchmark Suite 自动验证。
+            V6 第一次与 V5 真正闭环：能量沉积结果直接进入 Energy Ledger。
           </Paragraph>
         </Card>
       </Content>
